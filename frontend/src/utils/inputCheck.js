@@ -1,7 +1,7 @@
 const startCheck = (value, isStarted) => {
   const start = ['hello', 'goodbye', 'good', 'i want'];
   // const botReply = '';
-  if (start.find((str) => value.includes(str.toLowerCase()))) {
+  if (start.find((str) => value.toLowerCase().includes(str.toLowerCase()))) {
     isStarted(true);
     return 'Hi there! Please enter your username...';
   }
@@ -9,7 +9,7 @@ const startCheck = (value, isStarted) => {
 };
 const usernameCheck = (value, setUsername) => {
   if (value.includes(' ')) {
-    return "username can't include spaces, please try again.";
+    return "username can't include spaces, please try again...";
   }
   if (value.length < 5) {
     return 'username must be longer than 5 characters, please try again...';
@@ -39,7 +39,7 @@ const loanResponse = (botResponds) => {
 
 const loanChoices = (value, botResponds) => {
   if (value === '1') {
-    botResponds("Great! To proceed with the loan application, I'll need some information from you. Please provide your full name, contact number, and email address.");
+    botResponds("Great! To proceed with the loan application, I'll need some information from you. Please provide your email address.");
     return;
   }
 

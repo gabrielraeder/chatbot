@@ -7,7 +7,6 @@ import {
 import postAPI from './utils/postAPI';
 import getAPI from './utils/getAPI';
 
-// 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
 function App() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -34,7 +33,7 @@ function App() {
 
   const handleCSVDownload = async () => {
     const data = await getAPI('/chat');
-    console.log(data);
+
     let csvContent = 'user,messages\n';
 
     data.forEach((item) => {
@@ -86,6 +85,19 @@ function App() {
       loanChoices(inputValue, botResponds);
       return;
     }
+
+    const regex = /[a-z0-9]+@[a-z]+\.[a-z]/;
+    if (regex.test(inputValue)) {
+      botResponds('Great! We will send you an email with more informations shortly.');
+      botResponds('May I assist you in something else?');
+      return;
+    }
+
+    if (!regex.test(inputValue)) {
+      botResponds('Invalid email, please try again...');
+      return;
+    }
+
     setLoanChat(false);
 
     if (inputValue.toLowerCase().includes('goodbye')) {
@@ -93,7 +105,7 @@ function App() {
       return;
     }
 
-    botResponds('ChatGPT integration');
+    botResponds('ChatGPT integration here');
   };
 
   useEffect(() => {
@@ -107,9 +119,6 @@ function App() {
     };
     if (messages[messages.length - 1]?.content.toLowerCase().includes('goodbye to you too!')) {
       fetch();
-      setMessages([]);
-      setUsername('');
-      setPassword('');
       setStarted(false);
     }
   }, [messages]);
