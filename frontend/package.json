@@ -1,5 +1,5 @@
 {
-  "name": "chatbot_lexart",
+  "name": "app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chatscope/chat-ui-kit-react": "^1.10.1",
+    "@chatscope/chat-ui-kit-styles": "^1.4.0",
+    "@minchat/react": "^1.5.22",
+    "@minchat/react-chat-ui": "^0.4.3",
+    "file-saver": "^2.0.5",
+    "openai": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
