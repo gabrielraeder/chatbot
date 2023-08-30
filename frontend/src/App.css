@@ -158,3 +158,8 @@ button {
   font-size: 16px;
   color: white;
 }
+
+.loanBtns {
+  display: flex;
+  flex-direction: column;
+}
