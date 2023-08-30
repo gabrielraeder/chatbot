@@ -57,7 +57,7 @@
 
 .chat-messages {
   height: 400px;
-  padding: 10px;
+  /* padding: 10px; */
   overflow-y: auto;
 }
 
@@ -75,6 +75,7 @@
   border-radius: 20px;
   padding: 10px 15px;
   margin-left: 20px;
+  margin-right: 10px;
 }
 
 .user {
@@ -89,6 +90,7 @@
   border-radius: 20px;
   padding: 10px 15px;
   margin-right: 20px;
+  margin-left: 10px;
   color: black;
 }
 
@@ -117,4 +119,42 @@
 
 button {
   margin: 2px;
+}
+
+.container {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #8e8e8e48;
+}
+
+.logo {
+  flex: 1;
+  background-image: url('../static/logoA.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 30px;
+  border-radius: 100%;
+}
+
+.logo img {
+  max-width: 100px;
+  height: auto;
+}
+
+.content {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 16px;
+  color: white;
 }

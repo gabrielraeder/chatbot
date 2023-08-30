@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { saveAs } from 'file-saver';
 import './App.css';
 import {
   startCheck, usernameCheck, passwordCheck, loanResponse, loanChoices,
 } from './utils/inputCheck';
-import postAPI from './utils/postAPI';
-import getAPI from './utils/getAPI';
+import csvDownload, { addData } from './utils/csvDownload';
+import Header from './components/Header';
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -19,40 +18,28 @@ function App() {
     setInputValue(event.target.value);
   };
 
-  const addUserMessage = (content) => {
-    setMessages((prevMessages) => [...prevMessages, { role: 'user', content }]);
-  };
-
-  const addBotMessage = (content) => {
-    setMessages((prevMessages) => [...prevMessages, { role: 'bot', content }]);
+  const addMessage = (content, role) => {
+    setMessages((prevMessages) => [...prevMessages, { role, content }]);
   };
 
   const botResponds = (botReply) => setTimeout(() => {
-    addBotMessage(botReply);
+    addMessage(botReply, 'bot');
   }, 500);
-
-  const handleCSVDownload = async () => {
-    const data = await getAPI('/chat');
-
-    let csvContent = 'user,messages\n';
-
-    data.forEach((item) => {
-      const user = `Conversation user #${item.number} - ${item.date}`;
-      const msg = JSON.stringify(item.messages);
-
-      csvContent += `${user},${msg}\n`;
-    });
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
-    saveAs(blob, 'chat_csv.csv');
-  };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    if (inputValue.trim() === '') return;
+    if (inputValue.trim() === '') {
+      setInputValue('');
+      return;
+    }
 
-    addUserMessage(inputValue);
+    addMessage(inputValue, 'user');
     setInputValue('');
+
+    if (inputValue.toLowerCase().includes('goodbye')) {
+      botResponds('Goodbye to you too!');
+      return;
+    }
 
     if (!started) {
       const check = startCheck(inputValue, setStarted);
@@ -100,10 +87,10 @@ function App() {
 
     setLoanChat(false);
 
-    if (inputValue.toLowerCase().includes('goodbye')) {
-      botResponds('Goodbye to you too!');
-      return;
-    }
+    // if (inputValue.toLowerCase().includes('goodbye')) {
+    //   botResponds('Goodbye to you too!');
+    //   return;
+    // }
 
     botResponds('ChatGPT integration here');
   };
@@ -114,12 +101,12 @@ function App() {
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    const fetch = async () => {
-      await postAPI('/chat', { messages });
-    };
     if (messages[messages.length - 1]?.content.toLowerCase().includes('goodbye to you too!')) {
-      fetch();
-      setStarted(false);
+      setTimeout(() => {
+        addData(messages);
+        setMessages([]);
+        setStarted(false);
+      }, 1000);
     }
   }, [messages]);
 
@@ -127,10 +114,10 @@ function App() {
     <div className="App">
       <div className="chat-container">
         <div className="chat-messages" id="chat-messages">
+          <Header />
           {messages.map((message, index) => (
             <div
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
+              key={`${index + message}`}
               className={`message-container ${message.role === 'user' ? 'user' : 'bot'}`}
             >
               <div className={`message ${message.role === 'user' ? 'user-message' : 'bot-message'}`}>
@@ -146,8 +133,8 @@ function App() {
             onChange={handleInputChange}
             placeholder="Type your message..."
           />
-          <button type="submit">Send</button>
-          <button type="button" onClick={handleCSVDownload}>🡻</button>
+          <button type="submit" disabled={!inputValue}>Send</button>
+          <button type="button" onClick={() => csvDownload(messages)}>🡻</button>
         </form>
       </div>
     </div>
